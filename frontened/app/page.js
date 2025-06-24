@@ -1,86 +1,84 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { Box, Grid, Button } from "@mui/material";
-import axios from "axios";
-import AppBarComponent from "../components/AppBarComponent";
-import CourseCard from "../components/CourseCard";
-import AddCourseDialog from "../components/AddCourseDialog";
-import ViewCourseDialog from "../components/ViewCourseDialog";
+import Appbar from "@/components/Appbar";
+import CourseCard from "@/components/CourseCard";
+import Button from "@mui/material/Button";
+import AddCourseDialog from "@/components/AddCourseDialog";
+import ViewCourseDialog from "@/components/ViewCourseDialog";
 
-export default function LandingPage() {
+export default function Page() {
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [viewDialogOpen, setViewDialogOpen] = useState(false);
   const [courses, setCourses] = useState([]);
-  const [openAddDialog, setOpenAddDialog] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState(null);
 
-  // Fetch all courses from the backend
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await axios.get("https://course-helper-two.vercel.app/courses");
-        setCourses(response.data);
-      } catch (error) {
-        console.error("Error fetching courses:", error);
-        alert("Failed to fetch courses. Please try again.");
-      }
-    };
-
-    fetchCourses();
+    fetch("/data.json")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch courses");
+        }
+        return response.json();
+      })
+      .then((data) => setCourses(data))
+      .catch((error) => console.error("Error fetching courses:", error));
   }, []);
 
-  const handleAddOpen = () => setOpenAddDialog(true);
-  const handleAddClose = () => setOpenAddDialog(false);
+  const handleOpenDialog = () => setDialogOpen(true);
+  const handleCloseDialog = () => setDialogOpen(false);
 
-  const handleViewCourse = (course) => setSelectedCourse(course);
-  const handleCloseViewDialog = () => setSelectedCourse(null);
-
-  const handleDeleteCourse = (id) => {
-    setCourses(courses.filter((course) => course.id !== id));
-    setSelectedCourse(null);
+  const handleCardClick = (course) => {
+    setSelectedCourse(course);
+    setViewDialogOpen(true);
   };
 
-  const handleUpdateCourse = (id, updatedCourse) => {
-    setCourses(courses.map((course) => (course.id === id ? updatedCourse : course)));
+  const handleViewDialogClose = () => {
     setSelectedCourse(null);
-  };
-
-  const handleAddCourseSuccess = (newCourse) => {
-    setCourses([...courses, newCourse]);
+    setViewDialogOpen(false);
   };
 
   return (
-    <Box>
-      <AppBarComponent title="Course Helper" />
-
-      <Box sx={{ p: 3 }}>
-        <Grid container spacing={3}>
-          {courses.map((course) => (
-            <Grid item xs={12} sm={6} md={4} key={course.id}>
-              <CourseCard course={course} onClick={() => handleViewCourse(course)} />
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleAddOpen}
-        sx={{ position: "fixed", bottom: 16, left: 16 }}
+    <div
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
+      <Appbar />
+      <div
+        style={{
+          flex: 1,
+          padding: "20px",
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "20px",
+        }}
       >
-        Add Course
-      </Button>
+        {courses.map((course, index) => (
+          <CourseCard
+            key={index}
+            course={course}
+            onClick={() => handleCardClick(course)}
+          />
+        ))}
+      </div>
+      <div style={{ textAlign: "center", padding: "20px" }}>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleOpenDialog}
+          style={{ width: "200px", fontSize: "16px" }}
+        >
+          Add New Course
+        </Button>
+      </div>
 
-      <AddCourseDialog open={openAddDialog} onClose={handleAddClose} onSuccess={handleAddCourseSuccess} />
+      <AddCourseDialog open={dialogOpen} onClose={handleCloseDialog} />
 
       {selectedCourse && (
         <ViewCourseDialog
-          open={Boolean(selectedCourse)}
+          open={viewDialogOpen}
           course={selectedCourse}
-          onClose={handleCloseViewDialog}
-          onUpdate={handleUpdateCourse}
-          onDelete={handleDeleteCourse}
+          onClose={handleViewDialogClose}
         />
       )}
-    </Box>
+    </div>
   );
 }
