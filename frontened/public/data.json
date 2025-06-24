@@ -1,0 +1,30 @@
+[
+    {
+        "Course Name": "Fundamentals of Computing",
+        "Course Code": "ESC101",
+        "Credits": 14,
+        "Description": "A foundational course in computing and programming concepts.",
+        "Image URL": "https://media.istockphoto.com/id/1486662537/photo/c-programming-language-for-mobile-development-concept-smartphone-on-the-laptop-keyboard-the.webp?a=1&b=1&s=612x612&w=0&k=20&c=Bbc7ushhPMOVaR9qHDa-0FkchHFXzet900Wuc-GE9HY="
+    },
+    {
+        "Course Name": "Introduction to Electronics",
+        "Course Code": "ESC201",
+        "Credits": 14,
+        "Description": "An introductory course in electronics and circuit analysis.",
+        "Image URL": "https://media.istockphoto.com/id/519806569/photo/tests-electronic-equipment.webp?a=1&b=1&s=612x612&w=0&k=20&c=08-6TRhU1CV8GpwN2ql4LpWNUvo30lLW_wTiaTYfEsI="
+    },
+    {
+        "Course Name": "Data Structures and Algorithms",
+        "Course Code": "ESO207",
+        "Credits": 14,
+        "Description": "An intermediate course on data structures and algorithm design.",
+        "Image URL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2u_QLbW6KJTlEWjjjxQOLfTUeoeyxSYS3Qw&s"
+    },
+    {
+        "Course Name": "Machine Learning",
+        "Course Code": "CS771",
+        "Credits": 9,
+        "Description": "An advanced course on machine learning algorithms.",
+        "Image URL": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQb_P94osOyQmImVhWXE_mHwr8YsvVMY4b2PA&s"
+    }
+]
